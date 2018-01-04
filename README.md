@@ -1,9 +1,11 @@
 Femtoshare
 ==========
 
-Ultra simple self-hosted file sharing. All files can be accessed/modified by all users. Don't upload anything secret!
+Ultra simple self-hosted file sharing in a single Python script without any dependencies. All files can be accessed/modified by all users. Don't upload anything secret!
 
 Quickstart: run `./femtoshare.py`, then visit `http://localhost:8000/` in your web browser.
+
+![Femtoshare Screenshot](screenshot.png)
 
 Options:
 
