@@ -1,9 +1,9 @@
 Femtoshare
 ==========
 
-Ultra simple self-hosted file sharing in a single Python script without any dependencies. All files can be accessed/modified by all users. Don't upload anything secret!
+Ultra simple self-hosted file sharing in a single Python script, without any dependencies. All files can be accessed/modified by all users. Don't upload anything secret!
 
-Quickstart: run `./femtoshare.py`, then visit `http://localhost:8000/` in your web browser.
+Quickstart: `wget https://raw.githubusercontent.com/Uberi/femtoshare/master/femtoshare.py; chmod +x femtoshare.py; femtoshare.py`, then visit `http://localhost:8000/` in your web browser.
 
 ![Femtoshare Screenshot](screenshot.png)
 
@@ -30,7 +30,7 @@ I made Femtoshare to fix these issues. It's basically an FTP server that only ne
 Deployment
 ----------
 
-Minimal public-facing deployment: `./femtoshare.py --port 1234 --public` is visible at `http://YOUR_HOST:1234`.
+Minimal public-facing deployment: `wget https://raw.githubusercontent.com/Uberi/femtoshare/master/femtoshare.py; chmod +x femtoshare.py; ./femtoshare.py --port 1234 --public` is visible at `http://YOUR_HOST:1234`.
 
 For improved security, authentication, and HTTPS support, we can run the script as a systemd daemon and put it behind an Nginx reverse proxy, configured to use HTTP Basic Authentication. Assuming a fresh Ubuntu 16.04 LTS machine:
 
@@ -38,7 +38,7 @@ For improved security, authentication, and HTTPS support, we can run the script 
 2. Run software updates: `sudo apt-get update && sudo apt-get upgrade`.
 3. Harden SSH: in `/etc/ssh/sshd_config`, change `PasswordAuthentication` to `no` and `PermitRootLogin` to `no` and `AllowUsers` to `ubuntu`. Restart `sshd` using `sudo service sshd restart`.
 4. Get requirements: `sudo apt-get nginx openssl`.
-5. Get the code: `sudo mkdir -p /var/www/femtoshare && cd /var/www/femtoshare && sudo wget https://raw.githubusercontent.com/Uberi/femtoshare/master/femtoshare.py`.
+5. Get the code: `sudo mkdir -p /var/www/femtoshare && cd /var/www/femtoshare && sudo wget https://raw.githubusercontent.com/Uberi/femtoshare/master/femtoshare.py; sudo chmod +x femtoshare.py`.
 6. Set up restricted user: `sudo adduser --system --no-create-home --disabled-login --group femtoshare` (there is a `nobody` user, but it's better to have our own user in case other daemons also use `nobody`).
 7. Set up file storage directory: `sudo install -o femtoshare -g femtoshare -d /var/www/femtoshare/files`.
 8. Set up systemd service to start Femtoshare on boot:
