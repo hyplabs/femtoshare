@@ -90,7 +90,7 @@ class FemtoshareRequestHandler(BaseHTTPRequestHandler):
 
     def send_file(self, file_path, headers_only=False):
         try:
-            f = open(file_path, "rb")
+            f = open(os.path.join(FILES_DIRECTORY,file_path), "rb")
         except OSError:
             self.send_error(404, "File not found")
             return
@@ -165,6 +165,8 @@ class FemtoshareRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(response_bytes)
 
     def is_valid_filename(self, filename):
+        if not os.path.realpath(os.path.join(FILES_DIRECTORY,filename)).startswith(os.path.abspath(FILES_DIRECTORY)):
+            return False
         if (os.path.sep is not None and os.path.sep in filename) or (os.path.altsep is not None and os.path.altsep in filename):  # check for filesystem separators
             return False
         if filename in (os.pardir, os.curdir):  # check for reserved filenames
