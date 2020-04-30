@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  femtoshare:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    image: femtoshare:latest
+    restart: always
+    container_name: femtoshare
+    environment:
+      - PORT=8000
+      - TITLE=femtoshare
+      - UID=1000
+    user: "1000"
+    volumes:
+      - ./files:/files
