@@ -79,6 +79,11 @@ For improved security, authentication, and HTTPS support, we can run the script 
 
         # serve directory listing
         location = / {
+            # HTTP Auth Just For POST Requests (This will allow users toread files but they won't be able to upload or delete anything)
+            # limit_except GET HEAD {
+            #     auth_basic "Log in with username 'user' to access files";
+            #     auth_basic_user_file /var/www/femtoshare/.htpasswd;
+            # }
             proxy_pass http://127.0.0.1:8000;
             client_max_body_size 1000M;
         }

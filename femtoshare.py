@@ -29,6 +29,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--port", help="local network port to listen on", type=int, default=8000)
 parser.add_argument("--public", help="listen on remote network interfaces (allows other hosts to see the website; otherwise only this host can see it)", action="store_true")
 parser.add_argument("--files-dir", help="directory to upload/download files from (prefix with # to specify that the path is relative to the Femtoshare executable)", default="#files")
+parser.add_argument("--title", help="specify the name and the title of the app",default="femtoshare")
 args = parser.parse_args()
 
 if args.public:
@@ -39,6 +40,10 @@ if args.files_dir.startswith("@"):
     FILES_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), args.files_dir[1:])
 else:
     FILES_DIRECTORY = args.files_dir
+if args.title == "femtoshare":
+    title = "femtoshare"
+else:
+    title = args.title
 
 class FemtoshareRequestHandler(BaseHTTPRequestHandler):
     server_version = "Femtoshare/{}".format(__version__)
@@ -122,7 +127,7 @@ class FemtoshareRequestHandler(BaseHTTPRequestHandler):
             "<html>\n" +
             "    <head>\n" +
             "        <meta charset=\"utf-8\">\n" +
-            "        <title>femtoshare</title>\n" +
+            "        <title>{0}</title>\n".format(title) +
             "        <style type=\"text/css\">\n" +
             "            body { font-family: monospace; width: 80%; margin: 5em auto; text-align: center; }\n" +
             "            h1 { font-size: 4em; margin: 0; }\n" +
@@ -137,7 +142,7 @@ class FemtoshareRequestHandler(BaseHTTPRequestHandler):
             "        </style>\n" +
             "    </head>\n" +
             "    <body>\n" +
-            "        <h1>femtoshare</h1>\n" +
+            "        <h1>{0}</h1>\n".format(title) +
             "        <form enctype=\"multipart/form-data\" method=\"post\"><input name=\"upload_file\" type=\"file\" /><input type=\"submit\" value=\"upload\" /></form>\n" +
             (
                 "        <table>\n" +
