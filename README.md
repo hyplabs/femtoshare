@@ -32,12 +32,12 @@ Deployment
 
 Minimal public-facing deployment: `wget https://raw.githubusercontent.com/Uberi/femtoshare/master/femtoshare.py; chmod +x femtoshare.py; ./femtoshare.py --port 1234 --public` is visible at `http://YOUR_HOST:1234`.
 
-For improved security, authentication, and HTTPS support, we can run the script as a systemd daemon and put it behind an Nginx reverse proxy, configured to use HTTP Basic Authentication. Assuming a fresh Ubuntu 16.04 LTS machine:
+For improved security, authentication, and HTTPS support, we can run the script as a systemd daemon and put it behind an Nginx reverse proxy, configured to use HTTP Basic Authentication. Assuming a fresh Ubuntu 18.04 LTS machine:
 
-1. SSH into the machine: `ssh ubuntu@ec2-35-166-68-253.us-west-2.compute.amazonaws.com`.
-2. Run software updates: `sudo apt-get update && sudo apt-get upgrade`.
+1. SSH into the machine: `ssh ubuntu@f.anthonyz.ca`.
+2. Run software updates: `sudo apt-get update && sudo apt-get upgrade -y`.
 3. Harden SSH: in `/etc/ssh/sshd_config`, change `PasswordAuthentication` to `no` and `PermitRootLogin` to `no` and `AllowUsers` to `ubuntu`. Restart `sshd` using `sudo service sshd restart`.
-4. Get requirements: `sudo apt-get nginx openssl`.
+4. Get requirements: `sudo apt-get install nginx openssl`.
 5. Get the code: `sudo mkdir -p /var/www/femtoshare && cd /var/www/femtoshare && sudo wget https://raw.githubusercontent.com/Uberi/femtoshare/master/femtoshare.py; sudo chmod +x femtoshare.py`.
 6. Set up restricted user: `sudo adduser --system --no-create-home --disabled-login --group femtoshare` (there is a `nobody` user, but it's better to have our own user in case other daemons also use `nobody`).
 7. Set up file storage directory: `sudo install -o femtoshare -g femtoshare -d /var/www/femtoshare/files`.
@@ -64,7 +64,7 @@ For improved security, authentication, and HTTPS support, we can run the script 
     sudo systemctl enable femtoshare.service
     ```
 
-9. Set up a password file for HTTP Basic Authentication: `echo "user:$(openssl passwd -apr1 -salt 8b80ef96d09ffd0be0daa1202f55bb09 'YOUR_PASSWORD_HERE')" | sudo tee /var/www/femtoshare/.htpasswd`
+9. Set up a password file for HTTP Basic Authentication: `echo "user:$(openssl passwd -salt 8b80ef96d09ffd0be0daa1202f55bb09 -apr1 'YOUR_PASSWORD_HERE')" | sudo tee /var/www/femtoshare/.htpasswd`
 10. Set up Nginx as a reverse proxy with HTTP Basic Authentication:
 
     ```bash
@@ -90,11 +90,11 @@ For improved security, authentication, and HTTPS support, we can run the script 
     }
     EOF
     ```
-
-11. Set up HTTPS with Let's Encrypt: `export LC_ALL="en_US.UTF-8"; export LC_CTYPE="en_US.UTF-8"; sudo wget https://dl.eff.org/certbot-auto && sudo chmod a+x certbot-auto && sudo ./certbot-auto --nginx --debug`
-12. Set up twice-daily certificate renewal cronjob with Let's Encrypt: add `23 0,12 * * * PATH=/home/ubuntu/bin:/home/ubuntu/.local/bin:/home/ubuntu/bin:/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin /var/www/femtoshare/certbot-auto renew >> /var/www/femtoshare/letsencrypt-renew-certificate.log 2>&1` in the root crontab with `sudo crontab -e` (setting `PATH` is necessary in order to get Nginx config updates to work).
+11. Set up Certbot: `sudo add-apt-repository ppa:certbot/certbot; sudo apt-get update; sudo apt-get install certbot python-certbot-nginx`.
+12. Set up HTTPS with Let's Encrypt: `sudo certbot --nginx`.
 13. Start Femtoshare and Nginx: `sudo systemctl start femtoshare.service` and `sudo service nginx restart`.
 14. Allow incoming and outgoing HTTP and HTTPS traffic through the firewall.
+15. Allow APT to autoremove unused packages when performing unattended upgrades: `echo 'Unattended-Upgrade::Remove-Unused-Dependencies  "true";' >> /etc/apt/apt.conf.d/50unattended-upgrades`. For long-running applications, old kernel packages tend to use up all available disk space, enabling this setting prevents that.
 
 License
 -------
