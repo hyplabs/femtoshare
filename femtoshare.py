@@ -28,7 +28,7 @@ from shutil import copyfileobj
 parser = argparse.ArgumentParser()
 parser.add_argument("--port", help="local network port to listen on", type=int, default=8000)
 parser.add_argument("--public", help="listen on remote network interfaces (allows other hosts to see the website; otherwise only this host can see it)", action="store_true")
-parser.add_argument("--files-dir", help="directory to upload/download files from (prefix with # to specify that the path is relative to the Femtoshare executable)", default="#files")
+parser.add_argument("--files-dir", help="directory to upload/download files from (prefix with @ to specify that the path is relative to the Femtoshare executable)", default="@files")
 args = parser.parse_args()
 
 if args.public:
