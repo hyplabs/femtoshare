@@ -1,9 +1,11 @@
 Femtoshare
 ==========
 
-Ultra simple self-hosted file sharing in a single Python script, without any dependencies. All files can be accessed/modified by all users. Don't upload anything secret!
+Minimal, zero-dependency self-hosted file sharing server in a single Python script. All files can be accessed/modified by all users. Don't upload anything secret!
 
-Quickstart: `wget https://raw.githubusercontent.com/Uberi/femtoshare/master/femtoshare.py; chmod +x femtoshare.py; femtoshare.py`, then visit `http://localhost:8000/` in your web browser.
+See also: [femtosync](https://github.com/Uberi/femtosync), a minimal, zero-dependency rsync-like tool in pure Python.
+
+Quickstart: `wget https://raw.githubusercontent.com/Uberi/femtoshare/master/femtoshare.py; chmod +x femtoshare.py; ./femtoshare.py`, then visit `http://localhost:8000/` in your web browser.
 
 ![Femtoshare Screenshot](screenshot.png)
 
@@ -99,7 +101,7 @@ For improved security, authentication, and HTTPS support, we can run the script 
 License
 -------
 
-Copyright 2018-2018 [Anthony Zhang (Uberi)](http://anthonyz.ca).
+Copyright 2018-2022 [Anthony Zhang (Uberi)](http://anthonyz.ca).
 
 The source code is available online at [GitHub](https://github.com/Uberi/femtoshare).
 
